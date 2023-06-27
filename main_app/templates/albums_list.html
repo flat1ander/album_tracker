@@ -16,10 +16,11 @@
   </div>
   <!--  This anchor tag will redirect back to artist list without a query param -->
   <a class="button is-dark" href="{% url 'albums_list' %}">Clear Search</a>
+  <a class="button is-success" href="{% url 'album_create' %}">Add Album</a>
 </form>
 <div class="gallery">
   {% for album in albums %}
-  <a href="">
+  <a href="{% url 'album_detail' album.pk %}">
     <div class="card">
       <div class="card-image">
         <figure class="image is-square">
