@@ -1,21 +1,49 @@
 {% extends 'base.html' %} 
 {% block content %}
 <div class="detail__img">
-  <img src="{{album.image}}" alt="{{album.name}}" />
+    <img src="{{album.image}}" alt="{{album.name}}" />
 </div>
 <div class="detail__name">
-  <h1 class="title">{{album.name}}</h1>
-  <h2 class="title">{{album.artist}}</h2>
+    <h1 class="title">{{album.name}}</h1>
+    <h2 class="title">{{album.artist}}</h2>
 </div>
-    <div class="detail__container">
+<div class="detail__container">
     <div class="detail__songs mb-5">
-        <h3 class="title is-3">Track Listing</h3>
+        
+        <h3 class="title is-3">Songs</h3>
+        <form class="mb-5" action="{% url 'song_create' album.pk %}" method="post">
+            {% csrf_token %}
+            <div class="field has-addons">
+                <div class="control">
+                    <input
+                        class="input"
+                        type="text"
+                        name="title"
+                        placeholder="Title"
+                        required
+                    />
+                </div>
+                <div class="control">
+                    <input
+                        class="input"
+                        type="number"
+                        name="length"
+                        placeholder="Length in Seconds"
+                        min="1"
+                        required
+                    />
+                </div>
+                <div class="control">
+                    <input class="button is-primary" type="submit" value="Add Song" />
+                </div>
+            </div>
+        </form>
         {% for song in album.songs.all %}
-        <div class="song">
+    <div class="song">
         <span>{{forloop.counter}}</span>
         <span><b>{{song.title}}</b></span>
         <span>{{song.get_length}}</span>
-        </div>
+        
         <span>
           <div class="dropdown">
             <div class="dropdown-trigger">
@@ -44,56 +72,33 @@
             </div>
           </div>
         </span>
+    </div>
         {% empty %}
             <article class="message">
                 <div class="message-header">
                     <p>No Songs Available</p>
                 </div>
             </article>
+
         {% endfor %}
     </div>
-    <form class="mb-5" action="{% url 'song_create' album.pk %}" method="post">
-        {% csrf_token %}
-        <div class="field has-addons">
-        <div class="control">
-            <input
-            class="input"
-            type="text"
-            name="title"
-            placeholder="Title"
-            required
-            />
-        </div>
-        <div class="control">
-            <input
-            class="input"
-            type="number"
-            name="length"
-            placeholder="Length in Seconds"
-            min="1"
-            required
-            />
-        </div>
-        <div class="control">
-            <input class="button is-primary" type="submit" value="Add Song" />
-        </div>
-        </div>
-    </form>
-    <a href="{% url 'album_update' album.pk %}" class="button is-info">
-        <span class="icon">
-          <i class="fas fa-edit"></i>
-        </span>
-      </a>
-    <a href="{% url 'album_delete_confirmation' album.pk %}" class="button is-danger">
-      <span class="icon">
-        <i class="fas fa-trash-alt"></i>
-      </span>
-    </a>
-  </div>
-  <div class="detail__about">
-    <h4 class="title is-4">About</h4>
-    <p>{{album.info}}</p>
-  </div>
+      </div>
+    <div class="buttons">
+        <a href="{% url 'album_update' album.pk %}" class="button is-info">
+            <span class="icon">
+                <i class="fas fa-edit"></i>
+            </span>
+        </a>
+        <a href="{% url 'album_delete_confirmation' album.pk %}" class="button is-danger">
+            <span class="icon">
+                <i class="fas fa-trash-alt"></i>
+            </span>
+        </a>
+    </div>
+    <div class="detail__about">
+        <h4 class="title is-4">About</h4>
+        <p>{{album.info}}</p>
+    </div>
 </div>
 
 {% endblock %}
